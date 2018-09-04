@@ -1,0 +1,27 @@
+{
+	"name": "innologi/typo3-ext-update",
+	"type": "library",
+	"description": "TYPO3 ext_update.php abstract to serve as the foundation of complex extension update- and migration- scripts.",
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Frenck Lutke",
+			"email": "typo3@innologi.nl",
+			"homepage": "http://www.innologi.nl",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": "^7.1",
+		"typo3/cms-core": "^8.7",
+		"innologi/typo3-fal-api": "0.1.0"
+	},
+	"suggest": {
+		"symfony/console": "Dependency for optional CLI usage"
+	},
+	"autoload": {
+		"psr-4": {
+			"Innologi\\TYPO3ExtUpdate\\": "Classes/"
+		}
+	}
+}
