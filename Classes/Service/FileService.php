@@ -35,6 +35,12 @@ class FileService implements SingletonInterface
 
     /**
      *
+     * @var string
+     */
+    protected $sitePath;
+
+    /**
+     *
      * @param ResourceFactory $resourceFactory
      * @return void
      */
@@ -54,6 +60,19 @@ class FileService implements SingletonInterface
     }
 
     /**
+     *
+     * @return string
+     */
+    protected function getSitePath()
+    {
+        if ($this->sitePath === null) {
+            // @extensionScannerIgnoreLine
+            $this->sitePath = \version_compare(TYPO3_version, '9.4', '<') ? PATH_site : \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/';
+        }
+        return $this->sitePath;
+    }
+
+    /**
      * Retrieve an existing FAL file object, or create a new one if
      * it doesn't exist and return it.
      *
@@ -68,10 +87,11 @@ class FileService implements SingletonInterface
             if (! is_file($path) || ! file_exists($path)) {
                 throw new ResourceDoesNotExistException();
             }
-            if (strpos($path, PATH_site) !== 0) {
+
+            if (strpos($path, $this->getSitePath()) !== 0) {
                 throw new Exception\NotInDocumentRoot(1448613689, [
                     $path,
-                    PATH_site
+                    $this->getSitePath()
                 ]);
             }
             // this method creates the record if one does not yet exist
