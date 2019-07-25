@@ -60,6 +60,7 @@ class DatabaseService implements SingletonInterface
      */
     public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
     {
+        // @extensionScannerIgnoreLine
         $this->databaseConnection = $GLOBALS['TYPO3_DB'];
         $this->databaseConnection->store_lastBuiltQuery = true;
         // @TODO ___utilize $this->databaseConnection->sql_error() ?
@@ -105,6 +106,7 @@ class DatabaseService implements SingletonInterface
     public function migrateTableDataWithReferenceUid(string $sourceTable, string $targetTable, array $propertyMap, string $sourceReferenceProperty, array $evaluation = [], int $limitRecords = 100, ?SymfonyStyle $io = null): int
     {
         $evaluation[] = $sourceReferenceProperty . '=0';
+        // @extensionScannerIgnoreLine
         $where = join(' ' . DatabaseConnection::AND_Constraint . ' ', $evaluation);
         $max = $this->countTableRecords($sourceTable, $where);
         if ($max <= 0) {
@@ -305,6 +307,7 @@ class DatabaseService implements SingletonInterface
             }
 
             // update the $sourceFlagProperty value
+            // @extensionScannerIgnoreLine
             $this->databaseConnection->exec_UPDATEquery($sourceTable, '(' . join(') ' . DatabaseConnection::OR_Constraint . ' (', $whereArray) . ')', [
                 $sourceFlagProperty => 1
             ]);
@@ -360,6 +363,7 @@ class DatabaseService implements SingletonInterface
             foreach ($toMigrate as $row) {
                 $whereArray[] = $this->getWhereFromConditionArray(array_intersect_key($row, $intersect), $sourceTable);
             }
+            // @extensionScannerIgnoreLine
             $this->deleteTableRecords($sourceTable, '(' . join(') ' . DatabaseConnection::OR_Constraint . ' (', $whereArray) . ')');
         }
 
@@ -387,6 +391,7 @@ class DatabaseService implements SingletonInterface
     public function createUniqueRecordsFromValues(string $sourceTable, string $targetTable, array $propertyMap, array $evaluation = [], int $limitRecords = 10000, array &$uidMap = []): int
     {
         $uniqueBy = join(',', array_keys($propertyMap));
+        // @extensionScannerIgnoreLine
         $where = empty($evaluation) ? '' : join(' ' . DatabaseConnection::AND_Constraint . ' ', $evaluation);
         // select all unique propertymap combinations
         $toInsert = $this->databaseConnection->exec_SELECTgetRows($uniqueBy, $sourceTable, $where, $uniqueBy, $uniqueBy, $limitRecords);
@@ -738,6 +743,7 @@ class DatabaseService implements SingletonInterface
             }
             $where[] = $property . sprintf($operator, $value);
         }
+        // @extensionScannerIgnoreLine
         return join(' ' . DatabaseConnection::AND_Constraint . ' ', $where);
     }
 
@@ -762,6 +768,7 @@ class DatabaseService implements SingletonInterface
             $whereArray[] = $this->getWhereFromConditionArray(array_combine($properties, $row), $table);
         }
         // select without limit
+        // @extensionScannerIgnoreLine
         $matches = $this->selectTableRecords($table, '(' . join(') ' . DatabaseConnection::OR_Constraint . ' (', $whereArray) . ')', '*', '');
 
         // if there are existing matches, we need to trim $values

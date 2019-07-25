@@ -17,7 +17,8 @@
 		"innologi/typo3-fal-api": "~0.1.0 || dev-develop"
 	},
 	"suggest": {
-		"symfony/console": "Dependency for optional CLI usage"
+		"symfony/console": "Dependency for optional CLI usage",
+		"friendsoftypo3/typo3db-legacy": "Required for TYPO3 >=9 support"
 	},
 	"autoload": {
 		"psr-4": {
