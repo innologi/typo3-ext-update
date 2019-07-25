@@ -3,8 +3,10 @@ namespace Innologi\TYPO3ExtUpdate\Service;
 
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
+use Innologi\TYPO3FalApi\FileReferenceRepository;
 
 /**
  * Ext Update File Service
@@ -21,17 +23,35 @@ class FileService implements SingletonInterface
 
     /**
      *
-     * @var \TYPO3\CMS\Core\Resource\ResourceFactory
-     * @inject
+     * @var ResourceFactory
      */
     protected $resourceFactory;
 
     /**
      *
-     * @var \Innologi\TYPO3FalApi\FileReferenceRepository
-     * @inject
+     * @var FileReferenceRepository
      */
     protected $fileReferenceRepository;
+
+    /**
+     *
+     * @param ResourceFactory $resourceFactory
+     * @return void
+     */
+    public function injectResourceFactory(ResourceFactory $resourceFactory)
+    {
+        $this->resourceFactory = $resourceFactory;
+    }
+
+    /**
+     *
+     * @param FileReferenceRepository $fileReferenceRepository
+     * @return void
+     */
+    public function injectFileReferenceRepository(FileReferenceRepository $fileReferenceRepository)
+    {
+        $this->fileReferenceRepository = $fileReferenceRepository;
+    }
 
     /**
      * Retrieve an existing FAL file object, or create a new one if

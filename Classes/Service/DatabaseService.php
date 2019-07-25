@@ -26,8 +26,7 @@ class DatabaseService implements SingletonInterface
 
     /**
      *
-     * @var \Innologi\TYPO3ExtUpdate\Service\FileService
-     * @inject
+     * @var FileService
      */
     protected $fileService;
 
@@ -42,6 +41,16 @@ class DatabaseService implements SingletonInterface
      * @var array
      */
     protected $filesForReference = [];
+
+    /**
+     *
+     * @param FileService $fileService
+     * @return void
+     */
+    public function injectFileService(FileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
 
     /**
      * Constructor
