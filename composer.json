@@ -14,7 +14,7 @@
 	"require": {
 		"php": ">=7.1 <7.4",
 		"typo3/cms-core": "~8.7.0 || ~9.5.0",
-		"innologi/typo3-fal-api": "~0.1.0 || dev-develop"
+		"innologi/typo3-fal-api": "~0.1.1 || dev-develop"
 	},
 	"suggest": {
 		"symfony/console": "Dependency for optional CLI usage",
