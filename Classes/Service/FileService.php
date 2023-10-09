@@ -87,7 +87,7 @@ class FileService implements SingletonInterface
                 throw new ResourceDoesNotExistException();
             }
 
-            if (strpos($path, $this->getSitePath()) !== 0) {
+            if (!str_starts_with($path, $this->getSitePath())) {
                 throw new Exception\NotInDocumentRoot(1448613689, [
                     $path,
                     $this->getSitePath()
@@ -95,7 +95,7 @@ class FileService implements SingletonInterface
             }
             // this method creates the record if one does not yet exist
             return $this->resourceFactory->retrieveFileOrFolderObject($path);
-        } catch (ResourceDoesNotExistException $e) {
+        } catch (ResourceDoesNotExistException) {
             throw new Exception\FileDoesNotExist(1448614638, [
                 $path
             ]);

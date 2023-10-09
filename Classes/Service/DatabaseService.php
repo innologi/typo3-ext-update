@@ -76,7 +76,7 @@ class DatabaseService implements SingletonInterface
     {
         $tables = $this->databaseConnection->admin_get_tables();
         foreach ($tables as $tableName => $tableData) {
-            if (strpos($tableName, 'tx_' . $extensionKey) === 0) {
+            if (str_starts_with((string) $tableName, 'tx_' . $extensionKey)) {
                 return true;
             }
         }
