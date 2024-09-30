@@ -9,7 +9,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Ext Update Database Service
  *
  * Provides several database methods for common use-cases in ext-update context.
- * Note that it must be instantiated with the ObjectManager!
+ * Note that it must be instantiated through a service container!
  *
  * @package TYPO3ExtUpdate
  * @author Frenck Lutke
@@ -26,12 +26,6 @@ class DatabaseService implements SingletonInterface
 
     /**
      *
-     * @var FileService
-     */
-    protected $fileService;
-
-    /**
-     *
      * @var array
      */
     protected $referenceUidCache = [];
@@ -43,23 +37,13 @@ class DatabaseService implements SingletonInterface
     protected $filesForReference = [];
 
     /**
-     *
-     * @param FileService $fileService
-     * @return void
-     */
-    public function injectFileService(FileService $fileService)
-    {
-        $this->fileService = $fileService;
-    }
-
-    /**
      * Constructor
      *
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
      * @return void
      */
-    public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
-    {
+    public function __construct(
+        protected readonly FileService $fileService,
+    ) {
         // @extensionScannerIgnoreLine
         $this->databaseConnection = $GLOBALS['TYPO3_DB'];
         $this->databaseConnection->store_lastBuiltQuery = true;

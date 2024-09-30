@@ -1,8 +1,8 @@
 <?php
 namespace Innologi\TYPO3ExtUpdate;
 
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -41,9 +41,9 @@ abstract class ExtUpdateAbstract implements ExtUpdateInterface
      * @var array
      */
     protected $cliAllowedSeverities = [
-        FlashMessage::OK => 'success',
-        FlashMessage::WARNING => 'warning',
-        FlashMessage::ERROR => 'error'
+        ContextualFeedbackSeverity::OK => 'success',
+        ContextualFeedbackSeverity::WARNING => 'warning',
+        ContextualFeedbackSeverity::ERROR => 'error'
     ];
 
     /**
@@ -51,7 +51,7 @@ abstract class ExtUpdateAbstract implements ExtUpdateInterface
      * @var array
      */
     protected $cliErrorSeverities = [
-        FlashMessage::ERROR => true
+        ContextualFeedbackSeverity::ERROR => true
     ];
 
     /**
@@ -123,10 +123,8 @@ abstract class ExtUpdateAbstract implements ExtUpdateInterface
             $this->sourceExtensionKey = $this->extensionKey;
         }
 
-        /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-        $objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
-        $this->databaseService = $objectManager->get(\Innologi\TYPO3ExtUpdate\Service\DatabaseService::class);
-        $this->fileService = $objectManager->get(\Innologi\TYPO3ExtUpdate\Service\FileService::class);
+        $this->databaseService = GeneralUtility::makeInstance(\Innologi\TYPO3ExtUpdate\Service\DatabaseService::class);
+        $this->fileService = GeneralUtility::makeInstance(\Innologi\TYPO3ExtUpdate\Service\FileService::class);
 
         // determine mode
         $this->cliMode = TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_CLI;
@@ -139,7 +137,7 @@ abstract class ExtUpdateAbstract implements ExtUpdateInterface
             $this->overrideSourceRequirement = $arguments['overrideSourceRequirement'] ?? false;
         } else {
             // in normal (non-CLI) mode, messages are queued
-            $this->flashMessageQueue = $objectManager->get(
+            $this->flashMessageQueue = GeneralUtility::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessageQueue::class,
                 'extbase.flashmessages.tx_' . $this->extensionKey . '_extupdate'
             );
@@ -167,19 +165,19 @@ abstract class ExtUpdateAbstract implements ExtUpdateInterface
                 $this->addMessage(
                     'The updater has finished all of its tasks, you don\'t need to run it again until the next extension-update.',
                     'Update complete',
-                    FlashMessage::OK
+                    ContextualFeedbackSeverity::OK
                 );
             } else {
                 $this->addMessage(
                     'Please run the updater again to continue updating and/or follow any remaining instructions, until this message disappears.',
                     'Run updater again',
-                    FlashMessage::WARNING
+                    ContextualFeedbackSeverity::WARNING
                 );
             }
         } catch (Exception\Exception $e) {
-            $this->addMessage($e->getFormattedErrorMessage(), 'Update failed', FlashMessage::ERROR);
+            $this->addMessage($e->getFormattedErrorMessage(), 'Update failed', ContextualFeedbackSeverity::ERROR);
         } catch (\Exception $e) {
-            $this->addMessage($e->getMessage(), 'Update failed', FlashMessage::ERROR);
+            $this->addMessage($e->getMessage(), 'Update failed', ContextualFeedbackSeverity::ERROR);
         }
         return $this->cliMode ? '' : $this->flashMessageQueue->renderFlashMessages();
     }
@@ -245,7 +243,7 @@ abstract class ExtUpdateAbstract implements ExtUpdateInterface
      *            Optional severity, must be one of \TYPO3\CMS\Core\Messaging\FlashMessage constants
      * @return void
      */
-    protected function addMessage(string $messageBody, string $messageTitle = '', int $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK): void
+    protected function addMessage(string $messageBody, string $messageTitle = '', int $severity = ContextualFeedbackSeverity::OK): void
     {
         if ($this->cliMode) {
             if (isset($this->cliAllowedSeverities[$severity])) {

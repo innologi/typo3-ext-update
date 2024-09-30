@@ -12,7 +12,7 @@ use Innologi\TYPO3FalApi\FileReferenceRepository;
  * Ext Update File Service
  *
  * Provides several file methods for common use-cases in ext-update context.
- * Note that it must be instantiated with the ObjectManager!
+ * Note that it must be instantiated through a service container!
  *
  * @package TYPO3ExtUpdate
  * @author Frenck Lutke
@@ -23,41 +23,14 @@ class FileService implements SingletonInterface
 
     /**
      *
-     * @var ResourceFactory
-     */
-    protected $resourceFactory;
-
-    /**
-     *
-     * @var FileReferenceRepository
-     */
-    protected $fileReferenceRepository;
-
-    /**
-     *
      * @var string
      */
     protected $sitePath;
 
-    /**
-     *
-     * @param ResourceFactory $resourceFactory
-     * @return void
-     */
-    public function injectResourceFactory(ResourceFactory $resourceFactory)
-    {
-        $this->resourceFactory = $resourceFactory;
-    }
-
-    /**
-     *
-     * @param FileReferenceRepository $fileReferenceRepository
-     * @return void
-     */
-    public function injectFileReferenceRepository(FileReferenceRepository $fileReferenceRepository)
-    {
-        $this->fileReferenceRepository = $fileReferenceRepository;
-    }
+    public function __construct(
+        protected readonly ResourceFactory $resourceFactory,
+        protected readonly FileReferenceRepository $fileReferenceRepository,
+    ) {}
 
     /**
      *

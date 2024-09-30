@@ -12,9 +12,9 @@
 		}
 	],
 	"require": {
-		"php": ">=8.0",
-		"typo3/cms-core": "~8.7.0 || ~9.5.0 || ^10.0 || ^11.0",
-		"innologi/typo3-fal-api": "~0.1.1 || dev-develop"
+		"php": ">=8.2",
+		"typo3/cms-core": "^12.4",
+		"innologi/typo3-fal-api": "~1.0.0"
 	},
 	"suggest": {
 		"symfony/console": "Dependency for optional CLI usage",
